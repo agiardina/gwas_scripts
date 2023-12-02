@@ -11,6 +11,7 @@ then
     out=$2
     find $input_folder -maxdepth 1 -name "*.bed" | sort -V | rev | cut -f 2- -d . | rev > mergelist.txt
     $plink --merge-list mergelist.txt -make-bed --out $out
+    rm mergelist.txt
 else
     echo "input folder and ouput file expected as argument."
     echo "Example:"
