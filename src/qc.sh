@@ -7,7 +7,6 @@ MISS_SNPS_RATE=0.02
 MAF_RATE=0.05
 ##########################################
 
-
 plink=`which plink`
 if ! test $plink
 then
@@ -16,22 +15,35 @@ fi
 
 if ! test $1 || ! test $2
 then
-    echo "Error: Specify input file (prefix) and ouput directory" 
-    echo "Usage: qc.sh my_file my_output_directory"
-    exit 1
+    echo "Error: Specify input file (prefix), ouput directory and optionally keep file." 
+    echo "Usage: qc.sh my_file my_output_directory [keep_file]"
+    exit
 fi
 
 input=$1
 output=$2
+keep=$3
 
 step=1
+inputbed=$input
+
+echo "STEP ${step}"
+echo "-------------------------------"
+echo "Removing individuals with missing phenotype" 
+echo "-------------------------------"
+if [ -n "$keep" ]
+then
+    outputbed="${output}/genome_${step}_keep"    
+    $plink --bfile $inputbed --keep $keep --make-bed --out $outputbed
+    ((step++))
+    inputbed=$outputbed
+fi
+
 echo "STEP ${step}"
 echo "-------------------------------"
 echo "Generating histograms for individual missingness and SNP missingness"
 echo "-------------------------------"
-inputbed=$input
 $plink --bfile $inputbed --missing --out $output/plink
-echo "$plink --bfile $inputbed --missing --out $output/plink" 
 Rscript --no-save hist_miss.R $output
 
 ((step++))
