@@ -1,5 +1,4 @@
 #! /bin/bash
-plink=`which plink`
 if [[ -z "${PLINK_PATH}" ]]
 then
     plink=`which plink1.9 | which plink1 | which plink`
