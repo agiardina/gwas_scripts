@@ -17,6 +17,6 @@ opt_parser <- OptionParser(option_list=option_list);
 opt <- parse_args(opt_parser);
 
 cols <- unlist(strsplit(opt$cols, ","))
-df <- read.csv(opt$input)
+df <- read.table(opt$input,header=TRUE)
 df[,opt$name] <- (df[,cols[1]] + df[,cols[2]])/2
-write.csv(df,opt$input,row.names=FALSE)
+write.table(df,opt$input,row.names=FALSE,quote=FALSE)

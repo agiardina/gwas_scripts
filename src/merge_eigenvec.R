@@ -8,7 +8,7 @@ option_list = list(
   make_option(c("--iid"), type="character", default=NULL,
               help="IID column in the phenotype file", metavar="character"),
   make_option(c("-o", "--out"), type="character", default=NULL,
-              help="Output csv", metavar="character")
+              help="Output file", metavar="character")
 )
 opt_parser <- OptionParser(option_list=option_list);
 opt <- parse_args(opt_parser);
@@ -23,4 +23,6 @@ phenotype <- read.csv(opt$phenotype)
 
 #Merge eigenvector and phenotype file
 data <- merge(eigenvec,phenotype,by.x="IID",by.y=opt$iid)
-write.csv(data,file=opt$out,row.names = FALSE, quote=FALSE)
+cols <- setdiff(colnames(data), c('FID','IID'))
+data<-data[,c(c('FID','IID'),cols)]
+write.table(data,file=opt$out,row.names = FALSE, quote=FALSE)
