@@ -15,7 +15,7 @@ then
     bim="${1}.bim"
     extract="${output}.extract"
     awk '{print $1" "$4" "$4" "$2}' $bim > $extract
-    plink -bfile $ref --extract range $extract --allow-no-sex --indiv-sort 0 --make-bed --out $output    
+    $plink -bfile $ref --extract range $extract --allow-no-sex --indiv-sort 0 --make-bed --out $output    
 else
     cat << EOF
 The extractref script select variants from chrN.bim/bed/fam reference 
