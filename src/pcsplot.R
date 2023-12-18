@@ -20,8 +20,7 @@ opt_parser <- OptionParser(option_list=option_list);
 opt <- parse_args(opt_parser);
 
 group_col <- opt$group
-data <- read.csv(opt$input)
-print(colnames(data))
+data <- read.table(opt$input,header=TRUE)
 for (i in seq(1,opt$npcs-1)) {
   pc_x <- paste("PC",i,sep="") 
   pc_y <- paste("PC",i+1,sep="")
