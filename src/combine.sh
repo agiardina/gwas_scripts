@@ -1,8 +1,10 @@
 #! /bin/bash
 plink=`which plink`
-if [[ ! $plink ]]
+if [[ -z "${PLINK_PATH}" ]]
 then
-   plink=`which plink1.9`
+    plink=`which plink1.9 | which plink1 | which plink`
+else
+    plink=$PLINK_PATH
 fi
 
 if test $1 && test $2
