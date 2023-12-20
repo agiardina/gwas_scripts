@@ -1,8 +1,4 @@
 library("optparse")
-library("ggplot2")
-library("ggforce")
-library("concaveman")
-
 
 option_list = list(
   make_option(c("-i","--input"), type="character", default=NULL,
