@@ -8,11 +8,21 @@ MAF_RATE=0.05
 ##########################################
 
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-plink=`which plink`
-if ! test $plink
+
+if [[ -z "${PLINK_PATH}" ]]
 then
-   plink=`which plink1.9`
+    plink=`which plink1.9 | which plink1 | which plink`
+else
+    plink=$PLINK_PATH
 fi
+
+if [[ -z "${RSCRIPT_PATH}" ]]
+then
+    Rscript=`which RScript`
+else
+    Rscript=$RSCRIPT_PATH
+fi
+
 
 if ! test $1 || ! test $2
 then
@@ -43,7 +53,7 @@ echo "-------------------------------"
 echo "Generating histograms for individual missingness and SNP missingness"
 echo "-------------------------------"
 $plink --bfile $input --missing --out $output/plink
-Rscript --no-save $script_dir/hist_miss.R $output
+ --no-save $script_dir/hist_miss.R $output
 
 echo "-------------------------------"
 echo "Removing SNPS with missingness >  ${MISS_SNPS_RATE}"
@@ -71,16 +81,16 @@ echo "-------------------------------"
 echo "Generate a plot of the MAF distribution"
 echo "-------------------------------"
 $plink --bfile $input --freq --out "${output}/MAF_check"
-Rscript --no-save $script_dir/MAF_check.R $output
+$Rscript --no-save $script_dir/MAF_check.R $output
 
 echo "-------------------------------"
 echo "Remove SNPs with low frequency"
 echo "-------------------------------"
 outputbed="${output}/genome_${step}_maf"
-plink --bfile $input --maf $MAF_RATE --make-bed --out $outputbed
+$plink --bfile $input --maf $MAF_RATE --make-bed --out $outputbed
 input=$outputbed && ((step++))
 
 echo "-------------------------------"
 echo "Writes a list of genotype counts and Hardy-Weinberg equilibrium exact test statistics"
 echo "-------------------------------"
-plink --bfile $input --hardy --out $output/plink
+$plink --bfile $input --hardy --out $output/plink
