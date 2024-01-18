@@ -1,14 +1,17 @@
 library("fastman")
 library("Cairo")
+library("optparse")
 
 option_list = list(
-  make_option(c("-i","--input"), type="character", default=NULL,
-              help="Input file", metavar="character"),    
-  make_option(c("-o", "--out"), type="character", default=NULL,
-              help="Path of the png file", metavar="character"),
-)
+  make_option(c("-i", "--input"), type="character", default=NULL, 
+              help="Association file", metavar="character"),
+  make_option(c("-o", "--out"), type="character", default="r2_manhattan.png", 
+              help="Path of the png file", metavar="character")
+); 
+
 opt_parser <- OptionParser(option_list=option_list);
 opt <- parse_args(opt_parser);
+
 
 df = read.table(opt$input,header=TRUE)
 
